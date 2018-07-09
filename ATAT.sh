@@ -31,7 +31,7 @@ echo -e "\E[1;34m:::::::::::\e[97mPayloads & Results saved to ~/ATAT/\E[1;34m:::
 echo -e "\E[1;34m==========================================================="
 read -p "Press [Enter] key to Continue..."
 clear
-echo -e "\E[1;34m============== \e[97mAttack Team Automation Tool \E[1;34m============="
+echo -e "\E[1;34m=============== \e[97mAttack Team Automation Tool \E[1;34m=============="
 if [ 0 -le $secs ] && [ $secs -le 14 ];
 then
 cat << "EOF"
@@ -199,7 +199,7 @@ tput sgr0
 #echo -e "\E[1;34m===\e[97m[15]\e[31mMasscan All TCP Ports \e[97m[Masscan all TCP Ports on Many Targets]   \E[1;34m"
 #tput sgr0
 echo -e "\E[1;34m::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
-echo -e "\e[97m~~~~~~~~~~~~~~~~~~ \e[31mProps to rand0m1ze for the concept!\e[97m~~~~~~~~~~~~~~~~~~\e[31m"
+echo -e "\e[97m~~~~~~~~~~~~ \e[31mProps to rand0m1ze for the concept!\e[97m~~~~~~~~~~~~\e[31m"
 tput sgr0
 
 
