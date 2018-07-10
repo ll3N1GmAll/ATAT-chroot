@@ -967,26 +967,26 @@ do
 		#echo -e "\e[1;34m[*] Installing & Patching HostAPD-WPE ...\e[0m\n"
 			#;;
 		"Airgeddon Install Workaround")
-		rm airgeddon_*_all.deb airgeddon.deb
-		wget https://raw.githubusercontent.com/v1s1t0r1sh3r3/airgeddon/master/binaries/kali/airgeddon_{8..10}.{0..4}{0..4}-{0..3}_all.deb 
-        #The above command will need to be periodically updated as the major version goes beyond 8-10. This is hacky and terribly wasteful from a resource perspective; but will do for the time being.
-        mv airgeddon_*_all.deb airgeddon.deb
-		chmod +x airgeddon.deb
-		dpkg -i airgeddon.deb
-		echo -e "\e[1;34m[*] Installing Of Airgeddon Complete\e[0m\n"
-		echo -e "\e[1;34m[*] If Airgeddon Workaround fails, manually navigate to https://github.com/v1s1t0r1sh3r3/airgeddon/tree/master/binaries/kali/ ...\e[0m\n"
-		echo -e "\e[1;34m[*] Download Current airgeddon_#.##-#_all.deb file, then run with e[31m dpkg -i airgeddon*.deb\e[97m...\e[0m\n"
+	rm airgeddon_*_all.deb airgeddon.deb
+	wget https://raw.githubusercontent.com/v1s1t0r1sh3r3/airgeddon/master/binaries/kali/airgeddon_{8..10}.{0..4}{0..4}-{0..3}_all.deb 
+    #The above command will need to be periodically updated as the major version goes beyond 8-10. This is hacky and terribly wasteful from a resource perspective; but will do for the time being.
+    mv airgeddon_*_all.deb airgeddon.deb
+	chmod +x airgeddon.deb
+	dpkg -i airgeddon.deb
+	echo -e "\e[1;34m[*] Installing Of Airgeddon Complete\e[0m\n"
+	echo -e "\e[1;34m[*] If Airgeddon Workaround fails, manually navigate to https://github.com/v1s1t0r1sh3r3/airgeddon/tree/master/binaries/kali/ ...\e[0m\n"
+	echo -e "\e[1;34m[*] Download Current airgeddon_#.##-#_all.deb file, then run with e[31m dpkg -i airgeddon*.deb\e[97m...\e[0m\n"
 			;;
 		"WiFi Jammer Install")
-		git clone https://github.com/MisterBianco/wifijammer-ng ~/wifijammer-ng
-		cd ~/wifijammer-ng
-		pip install -r requirements.txt
-		chmod +x wifijammer.py && chmod +x wifijammer-ng.py
-		echo -e "\e[1;34m[*] Install Of WiFiJammer-ng Complete\e[0m\n"
+	git clone https://github.com/MisterBianco/wifijammer-ng ~/wifijammer-ng
+	cd ~/wifijammer-ng
+	pip install -r requirements.txt
+	chmod +x wifijammer.py && chmod +x wifijammer-ng.py
+	echo -e "\e[1;34m[*] Install Of WiFiJammer-ng Complete\e[0m\n"
 			;;
 		"Apt Update Fix")
-		rm -rf /var/lib/apt/lists && apt-get update && apt-get install kali-archive-keyring -y --allow-unauthenticated && apt-get install dirmngr --install-recommends -y --allow-unauthenticated && apt-key adv --keyserver hkp://keys.gnupg.net --recv-keys 7D8D0BF6
-		echo -e "\e[1;34m[*] Process Complete. This Should Only Ever Need To Be Run ONCE!\e[0m\n"
+	rm -rf /var/lib/apt/lists && apt-get update && apt-get install kali-archive-keyring -y --allow-unauthenticated && apt-get install dirmngr --install-recommends -y --allow-unauthenticated && apt-key adv --keyserver hkp://keys.gnupg.net --recv-keys 7D8D0BF6
+	echo -e "\e[1;34m[*] Process Complete. This Should Only Ever Need To Be Run ONCE!\e[0m\n"
 			;;
 		"Main Menu")
             ~/ATAT-chroot/ATAT.sh
@@ -1177,35 +1177,35 @@ select opt in "${options[@]}"
 do
     case $opt in
 		"Remove Wireless NIC from Network Manager")
-		#get MAC from wireless nic to be used in attack and add the MAC to /etc/NetworkManager/NetworkManager.conf (or where is best)
-		#[keyfile]
-		#unmanaged-devices=mac:00:11:22:33:44:55
-		echo -e "\E[1;34m::::: \e[97mCopy MAC address from the WLAN NIC interface you wish to use in your HostAPD-WPE attack\E[1;34m:::::"
-		ip addr
-		echo ""
-		echo -e "\E[1;34m::::: \e[97mFor ParrotOS & Distros That Auto Spoof MACs, Check 'Permanent MAC:' Value For Desired Interface To Be Sure You Have The Correct MAC. This WILL NOT WORK If You Enter A Spoofed MAC!\E[1;34m:::::"
-			read -p 'Enter WLAN NIC You Wish To Use (wlan0, wlan1, Etc.): ' userspnic;
-		macchanger -s $userspnic
-		echo -e "\E[1;34m::::: \e[97mPaste copied 'Permanent MAC' address from above into Set MAC for HostAPD-WPE Attacking WLAN NIC: prompt\E[1;34m:::::"
-			read -p 'Set MAC for HostAPD-WPE Attacking WLAN NIC: ' usermac;
-		mkdir -p /etc/NetworkManager/conf.d/
-		touch  /etc/NetworkManager/conf.d/NetworkManager.conf
-		echo [main] > /etc/NetworkManager/conf.d/NetworkManager.conf
-		echo plugins=ifupdown,keyfile >> /etc/NetworkManager/conf.d/NetworkManager.conf
-		echo  >> /etc/NetworkManager/conf.d/NetworkManager.conf
-		echo [ifupdown] >> /etc/NetworkManager/conf.d/NetworkManager.conf
-		echo managed=false >> /etc/NetworkManager/conf.d/NetworkManager.conf
-		echo  >> /etc/NetworkManager/conf.d/NetworkManager.conf
-		echo [keyfile] >> /etc/NetworkManager/conf.d/NetworkManager.conf
-		echo unmanaged-devices=mac:$usermac >> /etc/NetworkManager/conf.d/NetworkManager.conf
-		service NetworkManager restart	
+	#get MAC from wireless nic to be used in attack and add the MAC to /etc/NetworkManager/NetworkManager.conf (or where is best)
+	#[keyfile]
+	#unmanaged-devices=mac:00:11:22:33:44:55
+	echo -e "\E[1;34m::::: \e[97mCopy MAC address from the WLAN NIC interface you wish to use in your HostAPD-WPE attack\E[1;34m:::::"
+	ip addr
+	echo ""
+	echo -e "\E[1;34m::::: \e[97mFor ParrotOS & Distros That Auto Spoof MACs, Check 'Permanent MAC:' Value For Desired Interface To Be Sure You Have The Correct MAC. This WILL NOT WORK If You Enter A Spoofed MAC!\E[1;34m:::::"
+		read -p 'Enter WLAN NIC You Wish To Use (wlan0, wlan1, Etc.): ' userspnic;
+	macchanger -s $userspnic
+	echo -e "\E[1;34m::::: \e[97mPaste copied 'Permanent MAC' address from above into Set MAC for HostAPD-WPE Attacking WLAN NIC: prompt\E[1;34m:::::"
+		read -p 'Set MAC for HostAPD-WPE Attacking WLAN NIC: ' usermac;
+	mkdir -p /etc/NetworkManager/conf.d/
+	touch  /etc/NetworkManager/conf.d/NetworkManager.conf
+	echo [main] > /etc/NetworkManager/conf.d/NetworkManager.conf
+	echo plugins=ifupdown,keyfile >> /etc/NetworkManager/conf.d/NetworkManager.conf
+	echo  >> /etc/NetworkManager/conf.d/NetworkManager.conf
+	echo [ifupdown] >> /etc/NetworkManager/conf.d/NetworkManager.conf
+	echo managed=false >> /etc/NetworkManager/conf.d/NetworkManager.conf
+	echo  >> /etc/NetworkManager/conf.d/NetworkManager.conf
+	echo [keyfile] >> /etc/NetworkManager/conf.d/NetworkManager.conf
+	echo unmanaged-devices=mac:$usermac >> /etc/NetworkManager/conf.d/NetworkManager.conf
+	service NetworkManager restart	
 		    ;;
 		"Reset Wireless NIC for Network Manager Usage")
-		#get MAC from wireless nic used in attack and remove the MAC from /etc/NetworkManager/NetworkManager.conf (or where is best)
-		#[keyfile]
-		#unmanaged-devices=mac:00:11:22:33:44:55
-		rm /etc/NetworkManager/conf.d/NetworkManager.conf
-		service NetworkManager restart
+	#get MAC from wireless nic used in attack and remove the MAC from /etc/NetworkManager/NetworkManager.conf (or where is best)
+	#[keyfile]
+	#unmanaged-devices=mac:00:11:22:33:44:55
+	rm /etc/NetworkManager/conf.d/NetworkManager.conf
+	service NetworkManager restart
 		    echo -e "\E[1;34m::::: \e[97mWireless NIC Reset To Managed Mode\E[1;34m:::::"
 		    ;;
         "HostAPD-WPE Enterprise WiFi Fake RADIUS Server Attack")
@@ -1218,11 +1218,11 @@ do
 	sed -i "/jtr NETNTLM:/s/jtr NETNTLM:/""/g" ~/ATAT/john_users.txt
 	        echo -e "\E[1;34m::::: \e[97mRun Multi-Target Asleap or John The Ripper To Recover Passwords From Collected Challenge/Response Pairs\E[1;34m:::::"
             ;;
-    "Airgeddon")
+		"Airgeddon")
     echo -e "\E[1;34m::::: \e[97mLaunching Airgeddon!!\E[1;34m:::::"
 	bash airgeddon
             ;;
-    "Multi-Target Asleap Attack")
+		"Multi-Target Asleap Attack")
     read -p 'Set Path To Wordlist: ' wordlist;
     echo -e "\E[1;34m::::: \e[97mCracking Passwords!!\E[1;34m:::::"
     inputfile=~/ATAT/asleap_users.txt
@@ -1234,7 +1234,7 @@ do
 	done
 	        echo -e "\E[1;34m::::: \e[97mAsleap Output & All Cracked Passwords Located in ~/ATAT/asleap_cracked.txt\E[1;34m:::::"
             ;;
-    "Multi-Target John The Ripper Attack")
+		"Multi-Target John The Ripper Attack")
     read -p 'Set Path To Wordlist: ' wordlist;
     echo -e "\E[1;34m::::: \e[97mCracking Passwords!!\E[1;34m:::::"
     inputfile=~/ATAT/john_users.txt
@@ -1265,8 +1265,8 @@ done
 
 "0" | "0" )
   # 
-  echo -e "\E[1;34m::::: \e[97mIt's Over For Now... \E[1;34m:::::"
-  echo "Aufiederszehn" && exit 1 
+    echo -e "\E[1;34m::::: \e[97mIt's Over For Now... \E[1;34m:::::"
+    echo "Aufiederszehn" && exit 1 
 
 ;;
   
