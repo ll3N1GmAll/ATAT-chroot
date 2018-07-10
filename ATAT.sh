@@ -27,7 +27,7 @@ clear
 echo -e "\E[1;34m==========================================================="
 echo -e "\E[1;34m============== \e[97mMetasploit services started \E[1;34m================"
 echo -e "\E[1;34m:::::::::::::\e[97mScripts saved to ~/Desktop/temp/\E[1;34m::::::::::::::"
-echo -e "\E[1;34m:::::::::::\e[97mPayloads & Results saved to ~/ATAT/\E[1;34m:::::::::::::"
+echo -e "\E[1;34m::::::::\e[97mPayloads & Results saved to ~/ATAT-chroot/\E[1;34m:::::::::"
 echo -e "\E[1;34m==========================================================="
 read -p "Press [Enter] key to Continue..."
 clear
