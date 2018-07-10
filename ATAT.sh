@@ -188,7 +188,7 @@ echo -e "\E[1;34m===\e[97m[9] \e[95mEmpire & DeathStar  \e[97m  [Bow Before Your
 tput sgr0
 echo -e "\E[1;34m:::\e[97m[10]\e[31mWireless Attacks      \e[97m[Rule The Airwaves]   \E[1;34m"
 tput sgr0
-echo -e "\E[1;34m===\e[97m[0]\e[90mExit                   \e[97m[Exit ATAT]   \E[1;34m"
+echo -e "\E[1;34m===\e[97m[0] \e[90mExit                   \e[97m[Exit ATAT]   \E[1;34m"
 tput sgr0
 #echo -e "\E[1;34m:::\e[97m[12]\e[32mMulti-Target SNMP Enum\e[97m[SNMP Enumerate Many Targets]   \E[1;34m"
 #tput sgr0
@@ -985,7 +985,7 @@ do
 		echo -e "\e[1;34m[*] Install Of WiFiJammer-ng Complete\e[0m\n"
 			;;
 		"Apt Update Fix")
-		rm -rf /var/lib/apt/lists && apt-get update && apt-get install kali-archive-keyring -y && apt-get install dirmngr --install-recommends -y && apt-key adv --keyserver hkp://keys.gnupg.net --recv-keys 7D8D0BF6
+		rm -rf /var/lib/apt/lists && apt-get update && apt-get install kali-archive-keyring -y --allow-unauthenticated && apt-get install dirmngr --install-recommends -y && apt-key adv --keyserver hkp://keys.gnupg.net --recv-keys 7D8D0BF6
 		echo -e "\e[1;34m[*] Process Complete. This Should Only Ever Need To Be Run ONCE!\e[0m\n"
 			;;
 		"Main Menu")
