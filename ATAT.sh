@@ -271,7 +271,7 @@ EOF
             echo -e "\E[1;34m::::: \e[97mmsfvenom_payloads.txt Saved to ~/ATAT/\E[1;34m:::::"
             ;;   
         "Main Menu")
-            ~/ATAT/ATAT.sh
+            ~/ATAT-chroot/ATAT.sh
             ;;
         "Quit")
             echo "Aufiederszehn" && exit 1
@@ -304,7 +304,7 @@ do
             msfconsole -r ~/Desktop/temp/meterpreter.rc &
             ;;
         "Main Menu")
-            ~/ATAT/ATAT.sh
+            ~/ATAT-chroot/ATAT.sh
             ;;
         "Quit")
             echo "Aufiederszehn" && exit 1
@@ -564,7 +564,7 @@ do
 			echo -e "\E[1;34m::::: \e[97mStart an android/meterpreter/reverse_https listener\E[1;34m:::::" 
             ;; 
         "Main Menu")
-            ~/ATAT/ATAT.sh
+            ~/ATAT-chroot/ATAT.sh
             ;;
         "Quit")
             echo "Aufiederszehn" && exit 1
@@ -722,7 +722,7 @@ do
             echo -e "\E[1;34m::::: \e[97mEnter\e[31m resource '/root/ATAT/ATAT_multi_post.rc'\e[97m in listener window to run post exploitation modules\E[1;34m:::::"        
             ;;            
         "Main Menu")
-            ~/ATAT/ATAT.sh
+            ~/ATAT-chroot/ATAT.sh
             ;;
         "Quit")
             echo "Aufiederszehn" && exit 1
@@ -842,7 +842,7 @@ select opt in "${options[@]}"
     masscan --resume paused.conf
 			;;           
         "Main Menu")
-            ~/ATAT/ATAT.sh
+            ~/ATAT-chroot/ATAT.sh
             ;;
         "Quit")
             echo "Aufiederszehn" && exit 1
@@ -852,7 +852,7 @@ select opt in "${options[@]}"
 	done
 	        ;;
     "Main Menu")
-            ~/ATAT/ATAT.sh
+            ~/ATAT-chroot/ATAT.sh
             ;;
     "Quit")
             echo "Aufiederszehn" && exit 1
@@ -936,7 +936,7 @@ do
 			echo -e "\n\e[1;34m[*] I see that DBD is already installed...\e[0m"
 			echo ""
 			sleep 3
-			echo "Aufiederszehn" && ~/ATAT/ATAT.sh
+			echo "Aufiederszehn" && ~/ATAT-chroot/ATAT.sh
 		else
 			echo -e "\e[1;34m[*] Performing DBD install...\e[0m\n"
 			clear
@@ -989,7 +989,7 @@ do
 		echo -e "\e[1;34m[*] Process Complete. This Should Only Ever Need To Be Run ONCE!\e[0m\n"
 			;;
 		"Main Menu")
-            ~/ATAT/ATAT.sh
+            ~/ATAT-chroot/ATAT.sh
             ;;
 		"Quit")
             echo "Aufiederszehn" && exit 1
@@ -1154,7 +1154,7 @@ do
 		echo -e "\E[1;34m::::: \e[97mPSE RESTful API Has Been Shutdown \E[1;34m:::::"
 			;;
 		"Main Menu")
-           ~/ATAT/ATAT.sh
+           ~/ATAT-chroot/ATAT.sh
             ;;
         "Quit")
             echo "Aufiederszehn" && exit 1
@@ -1252,7 +1252,7 @@ do
 	python ~/wifijammer-ng/wifijammer.py -m 10 -p 15
             ;;                 
         "Main Menu")
-            ~/ATAT/ATAT.sh
+            ~/ATAT-chroot/ATAT.sh
             ;;
         "Quit")
             echo "Aufiederszehn" && exit 1
