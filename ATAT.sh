@@ -791,7 +791,7 @@ do
 	outputfile=SSLScan_Results.txt
 	for IP in $(cat $inputfile)
 	do
-	sslscan --no-failed --no-rejected --certificate-info --verbose $IP | tee $outputfile
+	sslscan --no-failed --no-rejected --certificate-info --verbose $IP | tee -a $outputfile
 		
 	cat $outputfile | egrep "Testing|RC4" | grep -B1 RC4 >> rc4.txt
 	cat $outputfile | egrep "Testing|SSLv2" | grep -B1 SSLv2 >> sslv2.txt
@@ -809,7 +809,7 @@ do
 	outputfile=~SSLScan_Results.txt
 	for IP in $(cat $inputfile)
 	do
-	sslscan --no-failed --no-rejected --certificate-info --verbose $IP | tee $outputfile
+	sslscan --no-failed --no-rejected --certificate-info --verbose $IP | tee -a $outputfile
 		
 	cat $outputfile | egrep "Testing|RC4" | grep -B1 RC4 >> rc4.txt
 	cat $outputfile | egrep "Testing|SSLv2" | grep -B1 SSLv2 >> sslv2.txt
@@ -827,7 +827,7 @@ do
 	outputfile=~SSLScan_Results.txt
 	for IP in $(cat $inputfile)
 	do
-	sslscan --no-failed --no-rejected --certificate-info --verbose $IP | tee $outputfile
+	sslscan --no-failed --no-rejected --certificate-info --verbose $IP | tee -a $outputfile
 		
 	cat $outputfile | egrep "Testing|RC4" | grep -B1 RC4 >> rc4.txt
 	cat $outputfile | egrep "Testing|SSLv2" | grep -B1 SSLv2 >> sslv2.txt
