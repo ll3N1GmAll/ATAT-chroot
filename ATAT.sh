@@ -188,14 +188,14 @@ echo -e "\E[1;34m===\e[97m[9] \e[95mEmpire & DeathStar  \e[97m  [Bow Before Your
 tput sgr0
 echo -e "\E[1;34m:::\e[97m[10]\e[31mWireless Attacks      \e[97m[Rule The Airwaves]   \E[1;34m"
 tput sgr0
-echo -e "\E[1;34m===\e[97m[00]\e[90mReset & Recharge      \e[97m[Remove All Scan Results]   \E[1;34m"
+echo -e "\E[1;34m===\e[97m[11]\e[90mData Exfiltration     \e[97m[Loot & Profit]   \E[1;34m"
 tput sgr0
-echo -e "\E[1;34m:::\e[97m[0] \e[32mExit                  \e[97m[Exit ATAT]   \E[1;34m"
+echo -e "\E[1;34m:::\e[97m[12]\e[32mMake Your Escape      \e[97m [Float Away w/ the Garbage]   \E[1;34m"
 tput sgr0
-#echo -e "\E[1;34m===\e[97m[13]\e[34mLoad Balance Detection\e[97m[Run LBD Against Many Targets]  \E[1;34m"
-#tput sgr0
-#echo -e "\E[1;34m:::\e[97m[14]\e[95mMulti-Target SSLScan \e[97m [Run SSLScan Against Many Targets]   \E[1;34m"
-#tput sgr0
+echo -e "\E[1;34m===\e[97m[00]\e[34mReset & Recharge      \e[97m[Remove All Scan Results]   \E[1;34m"
+tput sgr0
+echo -e "\E[1;34m:::\e[97m[0] \e[95mExit                  \e[97m[Exit ATAT]   \E[1;34m"
+tput sgr0
 #echo -e "\E[1;34m===\e[97m[15]\e[31mMasscan All TCP Ports \e[97m[Masscan all TCP Ports on Many Targets]   \E[1;34m"
 #tput sgr0
 echo -e "\E[1;34m::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
@@ -945,7 +945,7 @@ do
 		mkdir /tmp/ATAT/
 		echo ""
 
-	reqs="gcc gcc-mingw-w64-i686 curl jq bettercap libssl-dev libnl-genl-3-dev hostapd-wpe lynx airgeddon hostapd lighttpd asleap python-pip python-scapy gawk"
+	reqs="gcc gcc-mingw-w64-i686 curl jq bettercap libssl-dev libnl-genl-3-dev hostapd-wpe lynx airgeddon hostapd lighttpd asleap python-pip python-scapy gawk libatk-adaptor libgail-common"
 	for i in $reqs; do
 		dpkg -s "$i" &> /tmp/ATAT/$i-install.txt
 		isinstalled=$(cat /tmp/ATAT/$i-install.txt | grep -o "Status: install ok installed")
@@ -1481,6 +1481,34 @@ do
     esac
 done 
   
+;;
+
+"12" | "12" ) 
+  echo -e "\E[1;34m::::: \e[97mJust Float Away...With The Rest OF The Garbage\E[1;34m:::::"
+  echo -e "\E[1;34m::::: \e[97mStop Running Services & Remove Tracks From Your Campaigns \E[1;34m:::::"
+PS3='Enter your choice: ENTER=Options Menu | 3=Main Menu | 4=QUIT: '
+options=("Stop Running Services" "Main Menu" "Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+		"Stop Running Services")	
+	service apache2 stop
+		    ;;
+#		"Data Exfiltration")	
+#	read -p 'Enter Remote File On Target Including Full Path (C:\\\\\Users\\\\\Profile\\\\\filename.ext): ' remoteuserfile; read -p 'Enter File Destination Full Path on Local Machine for MSF (/root/file.ext): ' msflocaluserpath; #read -p 'Set LHOST IP or Domain Name & Port (if necessary i.e., 1.1.1.1 OR 1.1.1.1:8080): ' userhost; read -p 'Enter Local File Webserver Path (filename.ext): ' webuserfile; read -p 'Enter File Destination Full Path on Local Machine for PSH (%WINDIR%\\System32\\file.ext): ' pshuserpath;
+#		echo -e "\E[1;34m::::: \e[97mMeterpreter Command \E[1;34m:::::" 
+ #       echo download \"$remoteuserfile\" \"$msflocaluserpath\"
+	#	    ;;
+		"Main Menu")
+            ~/ATAT/ATAT.sh
+            ;;
+        "Quit")
+            echo "Aufiederszehn" && exit 1
+            ;;
+        *) echo invalid option;;
+    esac
+done 		      
+
 ;;
 
 "00" | "00" ) 
