@@ -753,7 +753,7 @@ do
 	set RHOSTS $usertarget;\
 	set RPORT $PORT;\
 	run;\
-	exit"
+	exit" | tee -a ~/ATAT/Multi_Port_AUX_logs.txt
 	done
             echo -e "\E[1;34m::::: \e[97mAll Targets Have Been Scanned\E[1;34m:::::"
             ;;
@@ -769,7 +769,7 @@ do
 	set RHOSTS $IP;\
 	set RPORT $userport;\
 	run;\
-	exit"
+	exit" | tee -a ~/ATAT/Multi_Target_AUX_logs.txt
 	done
 		   ;;
     "Multi-Target SNMP Enumeration")
