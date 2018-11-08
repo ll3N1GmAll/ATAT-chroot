@@ -1,7 +1,6 @@
 ***RTFM***RTFM***RTFM***RTFM***
 # ATAT
-Attack Team Automation Tool for automating penetration testing operations. Based on ezsploit by rand0m1ze (https://github.com/rand0m1ze/ezsploit). Durandal backdoor builder created by Travis Weathers (Skysploit).
-ShowMeCon 2018 talk - https://www.youtube.com/watch?v=9r8-WeryaN8
+Attack Team Automation Tool for automating penetration testing operations. Based on ezsploit by rand0m1ze. Durandal backdoor builder created by Travis Weathers (Skysploit).
 
 v0.0.0.4
 Added support for changeme Default Credential Checker
@@ -90,7 +89,6 @@ OPTION Multi_target Java JMX & Multi-Target Java RMI:
 
 OPTION Multi-Target SNMP Enumeration:
 /root/ATAT/MSF_targets.txt
-Output saved to ~/ATAT/SNMP_logs.txt
 
 OPTION Multi-Target Load Balancer Detection:
 /root/ATAT/MSF_targets.txt
@@ -98,7 +96,7 @@ Results output to screen and the ATAT folder in LBD_Results.txt.
 OUTPUT FILES APPEND DATA DUE TO THE NATURE OF THESE LOOPED OPERATIONS; THEREFORE, ALL OUTPUT FILES MUST BE DELETED OR CLEANED OUT PERIODICALLY TO GET RID OF PREVIOUS SCANS' RESULTS
 
 OPTION Multi-Target SSLScan:
-/root/ATAT/MSF_targets.txt
+~/ATAT/~SSLScan_masscan_results.txt 
 Targets can be entered as just IPs/URLs for scanning on the default port 443; or you can enter colon delimited lists to specify the port to scan each target on as follows:
 1.2.3.4:22
 1.2.3.4:8443
@@ -112,12 +110,8 @@ Freak vuln findings in freak.txt
 Weak Cipher Findings in weak_ciphers.txt
 Expired Certificate Findings in expired_certs.txt
 SSL Certificate Details in ssl_certs.txt
-
-Masscan results also output to ~SSLScan_masscan_results.txt and the Nmap parsing outputs results to SSLScan_nmap_results.txt. These files contain all targets and discovered ports colon delimited one per line as above.
-"Multi-Target SSLScan - With Masscan Results" can be run automatically after running masscan to check for SSL issues on all discovered ports on every host in scope effortlessly.
-If masscan isn't providing you with the data you need or you would rather use Nmap output you may use a save XML or TXT Nmap output file that was run with one of the "Intense" profiles (meaning -T4 -A -v parameters used in scan syntax).
-Simply use the "Extract All IP:Port Combos From Nmap Output For SSLScan Processing" option to process the Nmap output first and then use the "Multi-Target SSLScan - With Nmap Results" option to automatically run SSLScan against all targets and their identified open ports.
-All options output SSLScan results to: ~SSLScan_Results.txt
+Masscan results also output to ~SSLScan_masscan_results.txt. This file contains all targets and discovered ports colon delimited one per line as above.
+SSLScan can be run automatically after running masscan to check for SSL issues on all discovered ports on every host in scope effortlessly.
 OUTPUT FILES APPEND DATA DUE TO THE NATURE OF THESE LOOPED OPERATIONS; THEREFORE, ALL OUTPUT FILES MUST BE DELETED OR CLEANED OUT PERIODICALLY TO GET RID OF PREVIOUS SCANS' RESULTS
 
 OPTION Masscan All TCP Ports:
@@ -157,10 +151,8 @@ schtasks /create /sc onlogon /tn WindowsMgr /rl highest /tr \"%WINDIR%\System32\
 *NIX:
 ATAT creates a 'dbd' binary for *nix DBD builder option payloads and places it in the /var/www/html/ directory. 
 
-OPTION Listen:
-Select the chosen terminal emulator that your OS supports.
-
 For post exploitation once you acquire sessions via ATAT,
+
 METHOD 1: 
 Launch your listener with menu option 2. ATAT will intelligently detect the appropriate post modules to run against each session you receive.  However, due to a bug in the MSF AutoRunScript feature you must do the following: From your listener window, after all of your sessions are in (after your attacks have completed) hit enter to drop down to your msf expoit(multi/handler)> prompt and then enter the following command without double quotes: "resource '/root/ATAT/ATAT_multi_post.rc'" Check your loot files in /root/.msf4/loot/
 
