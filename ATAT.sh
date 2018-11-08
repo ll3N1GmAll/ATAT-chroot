@@ -944,8 +944,8 @@ done
   echo -e "\E[1;34m::::: \e[97mCheck for Dependencies\E[1;34m:::::"
   echo -e "\E[1;34m::::: \e[97mPowershell Empire & DeathStar Option Should Only Be Run If You Are Logged In As root!!\E[1;34m:::::"
 
-PS3='Enter your choice: ENTER=Options Menu | 8=Main Menu | 9=QUIT: '
-options=("Powershell Empire & DeathStar" "Dependencies" "DBD Installer" "Airgeddon Install Workaround" "WiFi Jammer Install" "changeme Install" "Apt Update Fix" "Main Menu" "Quit") #"HostAPD-WPE via Github"
+PS3='Enter your choice: ENTER=Options Menu | 10=Main Menu | 11=QUIT: '
+options=("Powershell Empire & DeathStar" "Dependencies" "DBD Installer" "Airgeddon Install Workaround" "WiFi Jammer Install" "changeme Install" "Apt Update Fix" "Pupy Install" "BeRoot Install" "Main Menu" "Quit") #"HostAPD-WPE via Github"
 select opt in "${options[@]}"
 do
     case $opt in
@@ -1072,6 +1072,18 @@ do
 		"Apt Update Fix")
 	rm -rf /var/lib/apt/lists && apt-get update && apt-get install kali-archive-keyring -y --allow-unauthenticated && apt-get install dirmngr --install-recommends -y --allow-unauthenticated && apt-key adv --keyserver hkp://keys.gnupg.net --recv-keys 7D8D0BF6
 	echo -e "\e[1;34m[*] Process Complete. This Should Only Ever Need To Be Run ONCE!\e[0m\n"
+			;;
+		"Pupy Install")
+	git clone --recursive https://github.com/n1nj4sec/pupy ~/pupy
+	cd ~/pupy
+	export PATH=$PATH:~/.local/bin
+	python create-workspace.py -DG pupyw
+	export PATH=$PATH:~/.local/bin
+			;;
+		"BeRoot Install")
+	git clone https://github.com/AlessandroZ/BeRoot ~/BeRoot
+	cd ~/BeRoot/Windows
+	pip install -r requirements.txt
 			;;
 		"Main Menu")
             ~/ATAT-chroot/ATAT.sh
@@ -1392,8 +1404,8 @@ done
          
  echo -e "\E[1;34m::::: \e[97mPost Exploitation\E[1;34m:::::"
  
-PS3='Enter your choice: ENTER=Options Menu | 8=Main Menu | 9=QUIT: '
-options=("Push File To Target with SCP - Creds Required" "Data Exfiltration" "Push File To Target with PSH / Meterpreter" "Wireless Password Stealer" "Windows 64 bit Credenital & Loot Harvester" "Windows 32 bit Credenital & Loot Harvester" "Bashark" "Main Menu" "Quit")
+PS3='Enter your choice: ENTER=Options Menu | 9=Main Menu | 10=QUIT: '
+options=("Push File To Target with SCP - Creds Required" "Data Exfiltration" "Push File To Target with PSH / Meterpreter" "Wireless Password Stealer" "Windows 64 bit Credenital & Loot Harvester" "Windows 32 bit Credenital & Loot Harvester" "Bashark" "Pupy" "Main Menu" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -1514,6 +1526,13 @@ do
         echo -e "\E[1;34m::::: \e[97mMove \"bash.sh\" To Target \E[1;34m:::::"
         echo -e "\E[1;34m::::: \e[97mType \"source bash.sh\" To Launch Bashark Framework \E[1;34m:::::"      
             ;;
+        "Pupy")
+	echo -e "\E[1;34m::::: \e[97mLaunching Pupy Cross-Platform Post Exploitation Framework... \E[1;34m:::::"
+	cd ~/pupy
+	export PATH=$PATH:~/.local/bin
+	pupysh-update
+	pupysh
+		    ;;
         "Main Menu")
             ~/ATAT/ATAT.sh
             ;;
@@ -1557,22 +1576,37 @@ done
 "13" | "13" )
   # Accept upper or lowercase input.
   echo -e "\E[1;34m::::: \e[97mPrivilege Escalation Methods \E[1;34m:::::"
-  PS3='Enter your choice: ENTER=Options Menu | 8=Main Menu | 9=QUIT: '
-options=("BeRoot" "LinEnum" "" )
+  PS3='Enter your choice: ENTER=Options Menu | 4=Main Menu | 5=QUIT: '
+options=("BeRoot Windows" "BeRoot Linux" "LinEnum" "Main Menu" "Quit" )
 select opt in "${options[@]}"
 do
     case $opt in
-		"BeRoot")
-			
+		"BeRoot Windows")
+	cd ~/BeRoot/Windows
+	cat README.md
+	echo -e "\E[1;34m::::: \e[97m \E[1;34m:::::"
 			;;
-
+		"BeRoot Linux")
+	cd ~/BeRoot/Linux
+	cat README.md
+	echo -e "\E[1;34m::::: \e[97m \E[1;34m:::::"
+			;;
 		"LinEnum")
-			
+	echo -e "\E[1;34m::::: \e[97mDownloading LinEnum Privilege Escalation Checking Script... \E[1;34m:::::"
+            wget https://github.com/rebootuser/LinEnum/blob/master/LinEnum.sh -O en.sh
+    echo -e "\E[1;34m::::: \e[97mMove \"en.sh\" To Target \E[1;34m:::::"
+    echo -e "\E[1;34m::::: \e[97mType \"./LinEnum.sh -r report -e /tmp/ \" To Launch A Quick LinEnum Scan \E[1;34m:::::" 
+	echo -e "\E[1;34m::::: \e[97mType \"./LinEnum.sh -r report -e /tmp/ -t\" To Launch A Thorough LinEnum Scan \E[1;34m:::::" 
+	echo -e "\E[1;34m::::: \e[97mYour Completed LinEnum Report Can Be Found On Your Target Here: /tmp/report \E[1;34m:::::"
+	echo -e "\E[1;34m::::: \e[97mDon't Forget To Delete The Report On Your Target Once You're Done - \"rm /tmp/report\" \E[1;34m:::::"
 			;;
-		"")
-			
-			;;
-
+		"Main Menu")
+            ~/ATAT/ATAT.sh
+            ;;
+        "Quit")
+            echo "Aufiederszehn" && exit 1
+            ;;
+        *) echo invalid option;;
     esac
 done
 
