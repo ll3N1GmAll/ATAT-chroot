@@ -1,6 +1,9 @@
 ***RTFM***RTFM***RTFM***RTFM***
 # ATAT
-Attack Team Automation Tool for automating penetration testing operations. Based on ezsploit by rand0m1ze. Durandal backdoor builder created by Travis Weathers (Skysploit).
+Attack Team Automation Tool for automating penetration testing operations. 
+
+Interface and concept based on ezsploit by rand0m1ze. 
+Durandal backdoor builder created by Travis Weathers (Skysploit); C code updated by ll3N1GmAll for newer gcc-mingw-w64-i686 compiler compatibility.
 
 v0.0.0.5
 Added support for Powershell wireless credential dumper
