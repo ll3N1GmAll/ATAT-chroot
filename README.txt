@@ -2,7 +2,13 @@
 # ATAT
 Attack Team Automation Tool for automating penetration testing operations. Based on ezsploit by rand0m1ze. Durandal backdoor builder created by Travis Weathers (Skysploit).
 
-v0.0.0.4
+v0.0.0.5
+Added support for Powershell wireless credential dumper
+Added support for LaZagne credential harvester
+Added support for LinEnum *nix Privilege Escalation checks
+Added support for Bashark Post Exploitation Framework
+Added support for Pupy Cross Platform Post Exploitation Framework
+Added support for changeme Default Credential Checker
 Added support for changeme Default Credential Checker
 Added support for parsing Nmap output to feed SSLScan
 Added Automated File Push and Exfiltration support
