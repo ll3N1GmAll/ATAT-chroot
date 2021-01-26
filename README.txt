@@ -1,3 +1,5 @@
+**THIS PROJECT HAS BEEN DEPRECATED AND IS NO LONGER MAINTAINED**
+
 ***RTFM***RTFM***RTFM***RTFM***
 # ATAT
 Attack Team Automation Tool for automating penetration testing operations. 
